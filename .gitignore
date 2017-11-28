@@ -1,0 +1,7 @@
+.idea
+/vendor
+/tests
+/reports
+phpunit.xml
+TokenStore.log
+composer.lock
