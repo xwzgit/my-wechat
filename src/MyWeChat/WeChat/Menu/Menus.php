@@ -36,14 +36,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
@@ -71,14 +71,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
@@ -106,14 +106,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
@@ -141,14 +141,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
@@ -176,14 +176,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
@@ -212,14 +212,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
@@ -247,14 +247,14 @@ class Menus
                 return $content;
             } catch (MyException $e) {
                 return [
-                    'code' => 1001,
-                    'error_msg' => $e->getMessage()
+                    'errcode' => 1001,
+                    'errmsg' => $e->getMessage()
                 ];
             }
         } else {
             return [
-                'code' => 1002,
-                'error_msg' => 'Url 错误',
+                'errcode' => 1002,
+                'errmsg' => 'Url 错误',
             ];
         }
     }
