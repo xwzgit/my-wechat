@@ -67,30 +67,6 @@ class MessageManage
         }
     }
 
-    /**
-     * 统一的消息处理调用
-     *
-     * @return string
-     */
-    public function responseMsg()
-    {
-        $msgType = strtolower($this->message['MsgType']);
-        if ($msgType == 'event') {
-
-            $function = strtolower($this->message['Event']);
-            if (method_exists($this, $function . 'Event')) {
-                return $this->{$function . 'Event'}($this->message);
-            } else {
-                return '';
-            }
-        } else {
-            if (method_exists($this, $msgType . 'Function')) {
-                return $this->{$msgType . 'Function'}($this->message);
-            } else {
-                return '';
-            }
-        }
-    }
 
     /**
      * 统一处理消息返回
@@ -101,7 +77,7 @@ class MessageManage
      * @param $contents
      * @return string
      */
-    protected function convertResponseMessage($message, $MsgType, $contents)
+    public function convertResponseMessage($message, $MsgType, $contents)
     {
         return '<xml>' .
         '<ToUserName><![CDATA[' . $message['FromUserName'] . ']]></ToUserName>' .
@@ -116,7 +92,7 @@ class MessageManage
      * @param $data
      * @return string
      */
-    protected function textContent($data)
+    public function textContent($data)
     {
         return '<Content><![CDATA[' . $data['content'] . ']]></Content>';
     }
@@ -126,7 +102,7 @@ class MessageManage
      * @param $data
      * @return string
      */
-    protected function linkContent($data)
+    public function linkContent($data)
     {
         return '<Title><![CDATA[' . $data['title'] . ']]></Title>
                 <Description><![CDATA[' . $data['description'] . ']]></Description>
@@ -138,7 +114,7 @@ class MessageManage
      * @param $data
      * @return string
      */
-    protected function imageContent($data)
+    public function imageContent($data)
     {
         return '<Image><MediaId><![CDATA[' . $data['media_id'] . ']]></MediaId></Image>';
     }
@@ -148,7 +124,7 @@ class MessageManage
      * @param $data
      * @return string
      */
-    protected function voiceContent($data)
+    public function voiceContent($data)
     {
         return '<Voice><MediaId><![CDATA[' . $data['media_id'] . ']]></MediaId></Voice>';
     }
@@ -159,7 +135,7 @@ class MessageManage
      * @param $data
      * @return string
      */
-    protected function videoContent($data)
+    public function videoContent($data)
     {
         return '<Video>
                 <MediaId><![CDATA[' . $data['media_id'] . ']]></MediaId>
@@ -177,7 +153,7 @@ class MessageManage
      * @param $news
      * @return mixed
      */
-    protected function newsContent($news)
+    public function newsContent($news)
     {
         $new = '<ArticleCount>' . count($news) . '</ArticleCount>';
         $new .= '<Articles>';
