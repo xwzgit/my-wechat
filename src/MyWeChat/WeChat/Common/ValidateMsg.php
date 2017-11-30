@@ -11,37 +11,18 @@
 namespace MyWeChat\WeChat\Common;
 
 
+use MyWeChat\WeChat\CryptLib\SHA1;
+
 class ValidateMsg
 {
     public function validateToken($signature, $timestamp, $nonce, $token)
     {
-        $sign = $this->getSHA1($token, $timestamp, $nonce, '');
-        if ($signature == $sign) {
+        $sha1 = new SHA1();
+        $sign = $sha1->getSHA1($token, $timestamp, $nonce, '');
+        if ($sign['errcode'] == '0' && $signature == $sign['sha1']) {
             return true;
         } else {
             return false;
-        }
-    }
-
-    /**
-     * 通信加密
-     *
-     * @param $token
-     * @param $timestamp
-     * @param $nonce
-     * @param $encrypt_msg
-     * @return string
-     */
-    protected function getSHA1($token, $timestamp, $nonce, $encrypt_msg)
-    {
-        //排序
-        try {
-            $array = [$encrypt_msg, $token, $timestamp, $nonce];
-            sort($array, SORT_STRING);
-            $str = implode($array);
-            return sha1($str);
-        } catch (Exception $e) {
-            return $e->getMessage();
         }
     }
 }

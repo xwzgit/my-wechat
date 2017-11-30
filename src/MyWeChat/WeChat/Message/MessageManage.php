@@ -10,26 +10,63 @@
 namespace MyWeChat\WeChat\Message;
 
 
+use MyWeChat\WeChat\CryptLib\PrpCrypt;
+use MyWeChat\WeChat\CryptLib\WeChatCrypt;
+
 class MessageManage
 {
+    protected $isCrypt = false;
+    protected $nonce = '';
     protected $message = '';
+    protected $weChatCrypt;
+
+    protected $token;
+    protected $encodingAesKey;
+    protected $appId;
 
     protected $sourceMessage = '';
 
-    public function __construct()
+    public function __construct($token, $encodingAesKey, $appId)
     {
         libxml_disable_entity_loader(true);
-
         $receipt = file_get_contents("php://input");
 
         if ($receipt == null) {
             $receipt = $GLOBALS['HTTP_RAW_POST_DATA'];
         }
         //记录一下推送日志
+        $this->token = $token;
+        $this->appId = $appId;
+        $this->encodingAesKey = $encodingAesKey;
 
         $postObj = simplexml_load_string($receipt, 'SimpleXMLElement', LIBXML_NOCDATA);
         if ($postObj) {
-            $this->message = json_decode(json_encode($postObj), true);
+
+            $sourceMsg = json_decode(json_encode($postObj), true);
+            //判断是否有密文，如果有密文，这进行解密处理同时设置该次为密文
+
+            if (isset($sourceMsg['Encrypt']) && isset($sourceMsg['MsgSignature'])) {
+                $this->isCrypt = true;
+                $this->weChatCrypt = new WeChatCrypt($this->token, $this->encodingAesKey,
+                    $this->appId);
+                //下面开始解密
+                $decodeMsg = $this->weChatCrypt->decryptMsg(
+                    $sourceMsg['MsgSignature'],
+                    $sourceMsg['TimeStamp'],
+                    $sourceMsg['Nonce'],
+                    $sourceMsg['Encrypt']
+                );
+
+                if($decodeMsg['errcode'] == '0') {
+                    $postObj = simplexml_load_string($decodeMsg['decrypt'], 'SimpleXMLElement', LIBXML_NOCDATA);
+                    $this->message = json_decode(json_encode($postObj), true);
+                } else {
+                    $this->message = $decodeMsg['errmsg'];
+                }
+
+            } else {
+                $this->message = $sourceMsg;
+            }
         }
         $this->sourceMessage = $receipt;
     }
@@ -79,12 +116,48 @@ class MessageManage
      */
     public function convertResponseMessage($message, $MsgType, $contents)
     {
-        return '<xml>' .
-        '<ToUserName><![CDATA[' . $message['FromUserName'] . ']]></ToUserName>' .
-        '<FromUserName><![CDATA[' . $message['ToUserName'] . ']]></FromUserName>' .
-        '<CreateTime>' . time() . '</CreateTime>' .
-        '<MsgType><![CDATA[' . $MsgType . ']]></MsgType>' .
-        $contents . '</xml>';
+        $content = '<xml>' .
+            '<ToUserName><![CDATA[' . $message['FromUserName'] . ']]></ToUserName>' .
+            '<FromUserName><![CDATA[' . $message['ToUserName'] . ']]></FromUserName>' .
+            '<CreateTime>' . time() . '</CreateTime>' .
+            '<MsgType><![CDATA[' . $MsgType . ']]></MsgType>' .
+            $contents . '</xml>';
+        if ($this->isCrypt) { //需要进行加密处理
+            $timestamp = time();
+
+            $pc = new PrpCrypt($this->encodingAesKey);
+            $nonce =$pc->getRandomStr();
+
+            $encode = $this->weChatCrypt->encryptMsg($content,$timestamp,'');
+            if($encode['errcode'] == '0') {
+
+                return $this->generate($encode['encrypt'], $encode['signature'], $timestamp, $nonce);
+            } else {
+
+            }
+        } else {
+            return $content;
+        }
+    }
+
+    /**
+     * 生成xml消息
+     * @param  $encrypt 加密后的消息密文
+     * @param  $signature 安全签名
+     * @param  $timestamp 时间戳
+     * @param  $nonce 随机字符串
+     *
+     * @return string
+     */
+    public function generate($encrypt, $signature, $timestamp, $nonce)
+    {
+        $format = "<xml>
+            <Encrypt><![CDATA[%s]]></Encrypt>
+            <MsgSignature><![CDATA[%s]]></MsgSignature>
+            <TimeStamp>%s</TimeStamp>
+            <Nonce><![CDATA[%s]]></Nonce>
+            </xml>";
+        return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
     }
 
     /**
