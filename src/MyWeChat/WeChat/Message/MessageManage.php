@@ -117,11 +117,13 @@ class MessageManage
     public function convertResponseMessage($message, $MsgType, $contents)
     {
         $content = '<xml>' .
-            '<ToUserName><![CDATA[' . $message['FromUserName'] . ']]></ToUserName>' .
-            '<FromUserName><![CDATA[' . $message['ToUserName'] . ']]></FromUserName>' .
-            '<CreateTime>' . time() . '</CreateTime>' .
-            '<MsgType><![CDATA[' . $MsgType . ']]></MsgType>' .
-            $contents . '</xml>';
+                '<ToUserName><![CDATA[' . $message['FromUserName'] . ']]></ToUserName>' .
+                '<FromUserName><![CDATA[' . $message['ToUserName'] . ']]></FromUserName>' .
+                '<CreateTime>' . time() . '</CreateTime>' .
+                '<MsgType><![CDATA[' . $MsgType . ']]></MsgType>' .
+                $contents .
+            '</xml>';
+
         if ($this->isCrypt) { //需要进行加密处理
             $timestamp = time();
 
