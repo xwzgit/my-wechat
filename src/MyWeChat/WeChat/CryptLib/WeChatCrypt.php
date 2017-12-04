@@ -99,12 +99,12 @@ class WeChatCrypt extends PrpCrypt
 
         //验证安全签名
         $sha1 = new SHA1;
-        $ignature = $sha1->getSHA1($this->token, $timestamp, $nonce, $encrypt);
-        if($ignature['errcode'] != '0') {
-            return $ignature;
+        $signature = $sha1->getSHA1($this->token, $timestamp, $nonce, $encrypt);
+        if($signature['errcode'] != '0') {
+            return $signature;
         }
 
-        if ($ignature['sha1'] != $msgSignature) {
+        if ($signature['sha1'] != $msgSignature) {
             return ErrorCode::$ValidateSignatureError;
         }
 

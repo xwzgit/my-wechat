@@ -121,16 +121,17 @@ class MessageManage
      */
     public function convertResponseMessage($message, $MsgType, $contents)
     {
+        $timestamp = time();
+
         $content = '<xml>' .
                 '<ToUserName><![CDATA[' . $message['FromUserName'] . ']]></ToUserName>' .
                 '<FromUserName><![CDATA[' . $message['ToUserName'] . ']]></FromUserName>' .
-                '<CreateTime>' . time() . '</CreateTime>' .
+                '<CreateTime>' . $timestamp . '</CreateTime>' .
                 '<MsgType><![CDATA[' . $MsgType . ']]></MsgType>' .
                 $contents .
             '</xml>';
 
         if ($this->isCrypt) { //需要进行加密处理
-            $timestamp = time();
 
             $pc = new WeChatCrypt($this->token,$this->encodingAesKey,$this->appId);
             $nonce =$pc->getRandomStr();
