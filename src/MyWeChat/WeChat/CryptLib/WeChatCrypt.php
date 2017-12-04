@@ -11,7 +11,7 @@ namespace MyWeChat\WeChat\CryptLib;
  * 1.第三方回复加密消息给公众平台；
  * 2.第三方收到公众平台发送的消息，验证消息的安全性，并对消息进行解密。
  */
-class WeChatCrypt
+class WeChatCrypt extends PrpCrypt
 {
     private $token;
     private $encodingAesKey;
@@ -25,6 +25,7 @@ class WeChatCrypt
      */
     public function __construct($token, $encodingAesKey, $appId)
     {
+        parent::__construct($encodingAesKey);
         $this->token = $token;
         $this->encodingAesKey = $encodingAesKey;
         $this->appId = $appId;
@@ -49,10 +50,8 @@ class WeChatCrypt
     public function encryptMsg($replyMsg, $timeStamp, $nonce)
     {
 
-        $pc = new PrpCrypt($this->encodingAesKey);
-
         //加密
-        $encryptMsg = $pc->encrypt($replyMsg, $this->appId);
+        $encryptMsg = $this->encrypt($replyMsg, $this->appId);
         if($encryptMsg['errcode'] != '0') {
             return $encryptMsg;
         }
@@ -98,7 +97,6 @@ class WeChatCrypt
             return ErrorCode::$IllegalAesKey;
         }
 
-        $pc = new PrpCrypt($this->encodingAesKey);
         //验证安全签名
         $sha1 = new SHA1;
         $ignature = $sha1->getSHA1($this->token, $timestamp, $nonce, $encrypt);
@@ -110,7 +108,7 @@ class WeChatCrypt
             return ErrorCode::$ValidateSignatureError;
         }
 
-        return $pc->decrypt($encrypt, $this->appId);
+        return $this->decrypt($encrypt, $this->appId);
     }
 
 

@@ -10,7 +10,6 @@
 namespace MyWeChat\WeChat\Message;
 
 
-use MyWeChat\WeChat\CryptLib\PrpCrypt;
 use MyWeChat\WeChat\CryptLib\WeChatCrypt;
 
 class MessageManage
@@ -34,6 +33,12 @@ class MessageManage
         if ($receipt == null) {
             $receipt = $GLOBALS['HTTP_RAW_POST_DATA'];
         }
+//        $receipt = '<xml>
+//                <Encrypt><![CDATA[vIhQKk7Gtc7dkuILeQY6UccRcdvMA9NCptuyAkGWTiWCTJfxXPWohxPlB7VVPqR8W+ubDiM6ybpca+b/tDiIYQH1lhWYhE4JnLSb0UGlhDhOpFv/F+ihufKpvuCXeXuCXIkYW+MTqd762xzk/x8FX1bjfrRfgtmsoAoSX1uMfGNEk1xM/JZzoatRaqP1JfbUE1Fv5EX6BURZ8uZ9q3/2AS+Vd0eg01p9Cap8Us4yjs4OMSm1c2oLCVw1Mz59Ln9nQE/NqHPmpzsEqxIXGBMTpTKfSqkjZ68Q7HP1z5BsTwBNBE5SYMplYd1rusK8UJcvKMtfyl3N6HUFuSLbnlMUmhDx0DukbdFnm2Q8bL3c3x/0MnBlXDTbQFNNshxIs3YQwJ1389j/9cmiuIkxM8hEaq7dq9dN8knt8garYYc7r4mVY0LdhreAkNNjjiKJeCS1QEMKpe3NP/Ps6f2UWc4wuw==]]></Encrypt>
+//                <MsgSignature><![CDATA[101722acdd922cfd107b6fa0ebfa6a092b12f1ab]]></MsgSignature>
+//                <TimeStamp>1409304348</TimeStamp>
+//                <Nonce><![CDATA[xxxxxx]]></Nonce>
+//                </xml>';
         //记录一下推送日志
         $this->token = $token;
         $this->appId = $appId;
@@ -127,10 +132,10 @@ class MessageManage
         if ($this->isCrypt) { //需要进行加密处理
             $timestamp = time();
 
-            $pc = new PrpCrypt($this->encodingAesKey);
+            $pc = new WeChatCrypt($this->token,$this->encodingAesKey,$this->appId);
             $nonce =$pc->getRandomStr();
 
-            $encode = $this->weChatCrypt->encryptMsg($content,$timestamp,'');
+            $encode = $this->weChatCrypt->encryptMsg($content,$timestamp,$nonce);
             if($encode['errcode'] == '0') {
 
                 return $this->generate($encode['encrypt'], $encode['signature'], $timestamp, $nonce);
