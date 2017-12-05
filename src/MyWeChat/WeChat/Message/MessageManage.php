@@ -23,7 +23,7 @@ class MessageManage
     protected $token;
 
     protected $timestamp = '';
-    protected $msgSignatur = '';
+    protected $signature = '';
     protected $nonce = '';
     protected $encryptType = '';
 
@@ -57,13 +57,13 @@ class MessageManage
             $sourceMsg = json_decode(json_encode($postObj), true);
             //判断是否有密文，如果有密文，这进行解密处理同时设置该次为密文
 
-            if (isset($sourceMsg['Encrypt']) && $this->msgSignatur) {
+            if (isset($sourceMsg['Encrypt']) && $this->signature) {
                 $this->isCrypt = true;
                 $this->weChatCrypt = new WeChatCrypt($this->token, $this->encodingAesKey,
                     $this->appId);
                 //下面开始解密
                 $decodeMsg = $this->weChatCrypt->decryptMsg(
-                    $this->msgSignatur,
+                    $this->signature,
                     $this->timestamp,
                     $this->nonce,
                     $sourceMsg['Encrypt']
