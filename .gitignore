@@ -4,4 +4,3 @@
 /reports
 phpunit.xml
 TokenStore.log
-composer.lock
