@@ -36,3 +36,9 @@
         
     //格式化成微信服务器可识别的xml数据，如果推送的消息是加密的话，将返回加密密文格式
     $response = $msg->convertResponseMessage($message, $MsgType, $contents)
+    
+## 3、加密解密
+    
+    //使用openssl_encrypt()进行加密，因为php7.1废弃了mcrypt加密
+    //解密openssl_decrypt()解密
+    //具体参见PrpCrypt.php文件

@@ -34,10 +34,10 @@ class MessageManage
             $receipt = $GLOBALS['HTTP_RAW_POST_DATA'];
         }
 //        $receipt = '<xml>
-//                <Encrypt><![CDATA[vIhQKk7Gtc7dkuILeQY6UccRcdvMA9NCptuyAkGWTiWCTJfxXPWohxPlB7VVPqR8W+ubDiM6ybpca+b/tDiIYQH1lhWYhE4JnLSb0UGlhDhOpFv/F+ihufKpvuCXeXuCXIkYW+MTqd762xzk/x8FX1bjfrRfgtmsoAoSX1uMfGNEk1xM/JZzoatRaqP1JfbUE1Fv5EX6BURZ8uZ9q3/2AS+Vd0eg01p9Cap8Us4yjs4OMSm1c2oLCVw1Mz59Ln9nQE/NqHPmpzsEqxIXGBMTpTKfSqkjZ68Q7HP1z5BsTwBNBE5SYMplYd1rusK8UJcvKMtfyl3N6HUFuSLbnlMUmhDx0DukbdFnm2Q8bL3c3x/0MnBlXDTbQFNNshxIs3YQwJ1389j/9cmiuIkxM8hEaq7dq9dN8knt8garYYc7r4mVY0LdhreAkNNjjiKJeCS1QEMKpe3NP/Ps6f2UWc4wuw==]]></Encrypt>
-//                <MsgSignature><![CDATA[101722acdd922cfd107b6fa0ebfa6a092b12f1ab]]></MsgSignature>
-//                <TimeStamp>1409304348</TimeStamp>
-//                <Nonce><![CDATA[xxxxxx]]></Nonce>
+//                <Encrypt><![CDATA[Xpw3Plkokn1XM6LkAQ1ZT97YG5XV/2xTwCBwtunkAHlTgCf4FRD9gL166IWOEXHegsBsb57AI91Fp1aaKvVTj1mkng600l3b2fvlrEICU8zfzM6Fzgd11sTCWs8UhDzC/MJi4VR2DVunF3hV1TAUpj2b88SLqdWaVKhLv3Of1oiXnKibEWtEWsntmARL00Eh5Um/Ll/P0rxuWVUfwxOjjkxG4QdD0f5jxclXSP4Ww3qXb+UE5xrb/KhcS7bF3QYNyAb2cYp8+ge00xg0rYKvOXcz6l8yAEZrY3nwVbSWvQo7eSLrlspjsr9dOn81K+yEb3mgFRBMraeD4zWUF/sKBbX8lRsnGRjQs/Tzk2g3EUXGLM7jEDnSAk7Wo4+AsThCaqiBuLOk2k9jHmJpanDvH63XZUiUTKVDCHrCTjuBNUiAXNpFKga6IMCw8AYbSCASPEQnIDhY+XZqh7UgsCv/z9nnfbVqVi1hDR1Hv5qQWks=]]></Encrypt>
+//                <MsgSignature><![CDATA[ce484544c732835c6ffecd1c3425920f19a55d39]]></MsgSignature>
+//                <TimeStamp>1512359620</TimeStamp>
+//                <Nonce><![CDATA[eSUjlbp7eDHL69xN]]></Nonce>
 //                </xml>';
         //记录一下推送日志
         $this->token = $token;
