@@ -15,17 +15,34 @@ use MyWeChat\WeChat\CryptLib\WeChatCrypt;
 class MessageManage
 {
     protected $isCrypt = false;
-    protected $nonce = '';
     protected $message = '';
     protected $weChatCrypt;
 
-    protected $token;
-    protected $encodingAesKey;
     protected $appId;
+    protected $encodingAesKey;
+    protected $token;
+
+    protected $timestamp = '';
+    protected $msgSignatur = '';
+    protected $nonce = '';
+    protected $encryptType = '';
 
     protected $sourceMessage = '';
 
-    public function __construct($token, $encodingAesKey, $appId)
+    public function __construct($config = [])
+    {
+        //记录一下推送日志
+        foreach ($config as $key => $value) {
+            $this->$key = $value;
+        }
+
+        $this->processXMl();
+    }
+
+    /**
+     * 获取数据和处理
+     */
+    protected function processXMl()
     {
         libxml_disable_entity_loader(true);
         $receipt = file_get_contents("php://input");
@@ -33,16 +50,7 @@ class MessageManage
         if ($receipt == null) {
             $receipt = $GLOBALS['HTTP_RAW_POST_DATA'];
         }
-//        $receipt = '<xml>
-//                <Encrypt><![CDATA[Xpw3Plkokn1XM6LkAQ1ZT97YG5XV/2xTwCBwtunkAHlTgCf4FRD9gL166IWOEXHegsBsb57AI91Fp1aaKvVTj1mkng600l3b2fvlrEICU8zfzM6Fzgd11sTCWs8UhDzC/MJi4VR2DVunF3hV1TAUpj2b88SLqdWaVKhLv3Of1oiXnKibEWtEWsntmARL00Eh5Um/Ll/P0rxuWVUfwxOjjkxG4QdD0f5jxclXSP4Ww3qXb+UE5xrb/KhcS7bF3QYNyAb2cYp8+ge00xg0rYKvOXcz6l8yAEZrY3nwVbSWvQo7eSLrlspjsr9dOn81K+yEb3mgFRBMraeD4zWUF/sKBbX8lRsnGRjQs/Tzk2g3EUXGLM7jEDnSAk7Wo4+AsThCaqiBuLOk2k9jHmJpanDvH63XZUiUTKVDCHrCTjuBNUiAXNpFKga6IMCw8AYbSCASPEQnIDhY+XZqh7UgsCv/z9nnfbVqVi1hDR1Hv5qQWks=]]></Encrypt>
-//                <MsgSignature><![CDATA[ce484544c732835c6ffecd1c3425920f19a55d39]]></MsgSignature>
-//                <TimeStamp>1512359620</TimeStamp>
-//                <Nonce><![CDATA[eSUjlbp7eDHL69xN]]></Nonce>
-//                </xml>';
-        //记录一下推送日志
-        $this->token = $token;
-        $this->appId = $appId;
-        $this->encodingAesKey = $encodingAesKey;
+
 
         $postObj = simplexml_load_string($receipt, 'SimpleXMLElement', LIBXML_NOCDATA);
         if ($postObj) {
@@ -50,15 +58,15 @@ class MessageManage
             $sourceMsg = json_decode(json_encode($postObj), true);
             //判断是否有密文，如果有密文，这进行解密处理同时设置该次为密文
 
-            if (isset($sourceMsg['Encrypt']) && isset($sourceMsg['MsgSignature'])) {
+            if (isset($sourceMsg['Encrypt']) && $this->msgSignatur) {
                 $this->isCrypt = true;
                 $this->weChatCrypt = new WeChatCrypt($this->token, $this->encodingAesKey,
                     $this->appId);
                 //下面开始解密
                 $decodeMsg = $this->weChatCrypt->decryptMsg(
-                    $sourceMsg['MsgSignature'],
-                    $sourceMsg['TimeStamp'],
-                    $sourceMsg['Nonce'],
+                    $this->msgSignatur,
+                    $this->timestamp,
+                    $this->nonce,
                     $sourceMsg['Encrypt']
                 );
 
@@ -75,6 +83,7 @@ class MessageManage
         }
         $this->sourceMessage = $receipt;
     }
+
 
     /**
      * 获取原始数据
