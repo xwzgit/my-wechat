@@ -51,7 +51,6 @@ class MessageManage
             $receipt = $GLOBALS['HTTP_RAW_POST_DATA'];
         }
 
-
         $postObj = simplexml_load_string($receipt, 'SimpleXMLElement', LIBXML_NOCDATA);
         if ($postObj) {
 
