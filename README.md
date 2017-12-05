@@ -19,7 +19,16 @@
 ## 2、消息处理
 
     //初始化消息处理类：处理消息接收和解密操作（如果有密文）
-    $msgManage = new MessageManage($token,$.encodeKey,$appid);
+    $params = [
+                'token' => config('wechatC.token'),
+                'encodingAesKey' => config('wechatC.encodeKey'),
+                'appid' => config('wechatC.appid'),
+                'timestamp' => $request->input('timestamp',''),
+                'nonce' => $request->input('nonce',''),
+                'msgSignatur' => $request->input('msg_signature',''),
+                'encryptType' => $request->input('encrypt_type',''),
+            ];
+    $msgManage = new MessageManage($params);
         
     //获取推送的原始消息体，如果是密文的话就是密文格式
     $receipt = $msgManage->getSourceMessage() 
