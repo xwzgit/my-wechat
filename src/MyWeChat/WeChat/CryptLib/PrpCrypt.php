@@ -34,7 +34,7 @@ class PrpCrypt
 
             $iv = substr($this->key, 0, 16);
             $encrypted = openssl_encrypt($text, 'aes-256-cbc', $this->key, OPENSSL_RAW_DATA, $iv);
-
+            $encrypted = substr($encrypted,0,strlen($encrypted)-16);
             //print(base64_encode($encrypted));
             //使用BASE64对加密后的字符串进行编码
             return ['errcode' => 0, 'encrypt' => base64_encode($encrypted)];
