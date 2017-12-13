@@ -146,10 +146,9 @@ class MessageManage
 
             $encode = $this->weChatCrypt->encryptMsg($content,$timestamp,$nonce);
             if($encode['errcode'] == '0') {
-
                 return $this->generate($encode['encrypt'], $encode['signature'], $timestamp, $nonce);
             } else {
-
+                return $encode['errmsg'];
             }
         } else {
             return $content;

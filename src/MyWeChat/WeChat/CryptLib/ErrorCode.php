@@ -32,4 +32,6 @@ class ErrorCode
     public static $EncodeBase64Error = ['errcode'=>-40009,'errmsg' =>'base64加密失败'];
     public static $DecodeBase64Error = ['errcode'=>-40010,'errmsg' =>'base64解密失败'];
     public static $GenReturnXmlError = ['errcode'=>-40011,'errmsg' =>'生成xml失败'];
+    public static $PKCS7EncoderError = ['errcode'=>-40012,'errmsg' =>'PKCS7Encoder解析错误'];
+
 }

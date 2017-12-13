@@ -66,7 +66,7 @@ class PrpCrypt
             $result = $pkc_encoder->decode($decrypted);
             //去除16位随机字符串,网络字节序和AppId
             if (strlen($result) < 16) {
-                return "";
+                return ErrorCode::$PKCS7EncoderError;
             }
             $content = substr($result, 16, strlen($result));
             $len_list = unpack("N", substr($content, 0, 4));

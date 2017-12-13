@@ -18,7 +18,7 @@ class SHA1
             $str = implode($array);
             return ['errcode' => 0, 'sha1' => sha1($str)];
         } catch (Exception $e) {
-            return ['errcode' => -1, 'sha1' => $e->getMessage()];
+            return ['errcode' => -1, 'errmsg' => $e->getMessage()];
         }
     }
 }
